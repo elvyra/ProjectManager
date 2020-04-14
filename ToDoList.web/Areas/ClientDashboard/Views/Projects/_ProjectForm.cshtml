@@ -1,0 +1,83 @@
+﻿@model ProjectViewModel
+
+<div class="col-md-6">
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">General</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <input asp-for="Id" id="inputProjectId" class="form-control" hidden>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" for="inputProjectTitle"></label>*
+                <input asp-for="Title" id="inputProjectTitle" class="form-control">
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" for="inputProjectDescription"></label>
+                <textarea asp-for="Description" id="inputProjectDescription" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClientCompany" for="inputClientCompany">Client Company</label>
+                <input asp-for="ClientCompany" id="inputClientCompany" class="form-control">
+                <span asp-validation-for="ClientCompany" class="text-danger"></span>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>
+<div class="col-md-6">
+    <div class="card card-secondary">
+        <div class="card-header">
+            <h3 class="card-title">Duration</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label asp-for="StartDate" for="inputStartDate"></label>*
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="far fa-calendar-alt"></i>
+                        </span>
+                    </div>
+                    <input asp-for="StartDate" id="inputStartDate" class="form-control float-right" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm").Replace(' ','T')">
+                </div>
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" for="inputEndDate"></label>*
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="far fa-calendar-alt"></i>
+                        </span>
+                    </div>
+                    <input asp-for="EndDate" id="inputEndDate" class="form-control float-right" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm").Replace(' ','T')">
+                </div>
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <small class="form-text text-muted">Project Start and End Date fields are required.</small>
+                <small class="form-text text-muted">Please, edit the end date field to set project duration.</small>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>

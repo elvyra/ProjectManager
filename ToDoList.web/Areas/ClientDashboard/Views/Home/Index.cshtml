@@ -1,0 +1,285 @@
+﻿
+@using ToDoList.Domains.Enums
+
+@model ToDoList.web.Areas.ClientDashboard.Models.MainDashboardViewModel
+
+@{
+    ViewData["Title"] = "Client Dashboard";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Client Dashboard</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active">Home</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+
+<div class="content">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@Model.WorkingOnProjectsCount</h3>
+                        <p>Working on projects </p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-bag"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@Model.DoneProjectsCount</h3>
+                        <p>Done projects</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-stats-bars"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@Model.NewProjectsCount</h3>
+                        <p>New projects</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>@Model.UnconfirmedProjectsCount</h3>
+
+                        <p>Unconfirmed projects</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-alert-circled"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <!-- Left col -->
+            <div class="col-md-8">
+                <!-- /.card -->
+                <div class="row">
+                    <div class="col">
+                        <!-- TABLE: LATEST ORDERS -->
+                        <div class="card @(@Model.WorkingOnProjectsCount == 0 ? "collapsed-card" : "")">
+                            <div class="card-header border-transparent bg-gradient-info">
+                                <h3 class="card-title">Working on projects</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas @(@Model.WorkingOnProjectsCount == 0 ? "fa-plus" : "fa-minus")"></i>
+
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0">
+                                @if (@Model.WorkingOnProjectsCount == 0)
+                                {
+                                    <p class="ml-4">No projects</p>
+                                }
+                                else
+                                {
+                                    <partial name="_ProjectsTableWithCompleteness" model="@Model.WorkingOnProjectsList" />
+                                }
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+                        <div class="card @(@Model.NewProjectsCount == 0 ? "collapsed-card" : "")">
+                            <div class="card-header border-transparent bg-gradient-warning">
+                                <h3 class="card-title">New projects</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas @(@Model.NewProjectsCount == 0 ? "fa-plus" : "fa-minus")"></i>
+
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0">
+                                @if (@Model.NewProjectsCount == 0)
+                                {
+                                    <p class="ml-4">No projects</p>
+                                }
+                                else
+                                {
+                                    <partial name="_ProjectsTableWithStarted" model="@Model.NewProjectsList" />
+                                }
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.col -->
+
+            <div class="col-md-4">
+                <!-- UNCONFIRMED PROJECTS LIST -->
+                <div class="card @(@Model.UnconfirmedProjectsCount == 0 ? "collapsed-card" : "")">
+                    <div class="card-header border-transparent bg-gradient-danger">
+                        <h3 class="card-title">Unconfirmed projects</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas @(@Model.UnconfirmedProjectsCount == 0 ? "fa-plus" : "fa-minus")"></i>
+
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <ul class="products-list product-list-in-card pl-2 pr-2">
+                            @if (@Model.UnconfirmedProjectsCount == 0)
+                            {
+                                <li>
+                                    <p class="ml-4">No projects</p>
+                                </li>
+                            }
+                            else
+                            {
+                                @foreach (var project in Model.UnconfirmedProjectsList)
+                                {
+                                    <li class="item">
+                                        <div class="product-info" style="margin-left: .8em;">
+                                            <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id" class="product-title">@project.Title</a>
+
+                                            @if (project.TillDeadline > 30)
+                                            {
+                                                <span class="badge badge-light float-right">@(project.TillDeadline / 30) months</span>
+                                            }
+                                            else if (project.TillDeadline > 0)
+                                            {
+                                                <span class="badge badge-warning float-right">@project.TillDeadline days</span>
+                                            }
+                                            else if (project.TillDeadline == 0)
+                                            {
+                                                <span class="badge badge-danger float-right">Ends today</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-danger float-right">Late  @(project.TillDeadline * -1) days</span>
+                                            }
+
+                                            <small class="product-description">
+                                                Start: <span class="text-dark mr-3">@project.StartDate.ToString().Substring(0, 10)</span>
+                                                End: <span class="text-dark">@project.EndDate.ToString().Substring(0, 10)</span>
+
+
+                                            </small>
+                                            <form method="post" asp-controller="Projects" asp-action="Delete" class="form-inline float-right">
+                                                <input asp-for="@Model.SelectedProjectId" value="@project.Id" hidden />
+                                                <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                            </form>
+                                            <span class="product-description">
+                                                @project.Description
+                                            </span>
+
+                                        </div>
+                                    </li>
+                                    <!-- /.item -->
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- DONE PROJECTS LIST -->
+                <div class="card @(@Model.DoneProjectsCount == 0 ? "collapsed-card" : "")">
+                    <div class="card-header border-transparent bg-gradient-success">
+                        <h3 class="card-title">Done projects</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas @(@Model.DoneProjectsCount == 0 ? "fa-plus" : "fa-minus")"></i>
+
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <ul class="products-list product-list-in-card pl-2 pr-2">
+                            @if (@Model.DoneProjectsCount == 0)
+                            {
+                                <li>
+                                    <p class="ml-4">No projects</p>
+                                </li>
+                            }
+                            else
+                            {
+                                @foreach (var project in Model.DoneProjectsList)
+                                {
+                                    <li class="item">
+                                        <div class="product-info" style="margin-left: .8em;">
+                                            <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id" class="product-title">
+                                                @project.Title
+
+                                                @if (project.Duration > 30)
+                                                {
+                                                    <span class="badge badge-light float-right">Duration: @(project.Duration / 30) months</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge badge-warning float-right">Duration: @project.Duration days</span>
+                                                }
+                                            </a>
+
+                                            <small class="product-description">
+                                                Start: <span class="text-dark mr-3">@project.StartDate.ToString().Substring(0, 10)</span>
+                                                End: <span class="text-dark">@project.EndDate.ToString().Substring(0, 10)</span>
+                                            </small>
+                                            <span class="product-description">
+                                                @project.Description
+                                            </span>
+
+                                        </div>
+                                    </li>
+                                    <!-- /.item -->
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content -->

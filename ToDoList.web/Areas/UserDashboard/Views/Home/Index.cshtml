@@ -1,0 +1,733 @@
+﻿@using ToDoList.Domains.Enums
+
+@model MainDashboardViewModel
+
+@{
+    ViewData["Title"] = "User Dashboard";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">User Dashboard</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active">Home</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+
+<div class="content">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@Model.IsProjectOwnerCount</h3>
+                        <p>Project Owner</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-at"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@Model.IsScrumMasterCount</h3>
+                        <p>Scrum Master</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-briefcase"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@Model.IsInTeamCount</h3>
+                        <p>In Teams</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>@Model.AssignedTasksCount</h3>
+
+                        <p>Assigned Tasks</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-bug"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <!-- Left col -->
+            <div class="col-md-9">
+                <!-- /.card -->
+                <div class="row">
+                    <div class="col">
+                        <!-- TABLE: PROJECT OWNER -->
+                        <div class="card @(@Model.IsProjectOwnerCount == 0 ? "collapsed-card" : "")">
+                            <div class="card-header border-transparent bg-gradient-info">
+                                <h3 class="card-title">Project Owner</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas @(@Model.IsProjectOwnerCount == 0 ? "fa-plus" : "fa-minus")"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0">
+                                @if (@Model.IsProjectOwnerCount == 0)
+                                {
+                                    <p class="ml-4">No projects</p>
+                                }
+                                else
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Project Title</th>
+                                                    <th>Client</th>
+                                                    <th>Scrum Master</th>
+                                                    <th>Completeness</th>
+                                                    <th>Duration</th>
+                                                    <th>Till deadline</th>
+                                                    <th>Done</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var project in Model.IsProjectOwnerList)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <a asp-area="UserDashboard" asp-controller="Projects" asp-action="DetailsAsProjectOwner" asp-route-id="@project.Id">@project.Title</a>
+                                                            @if (project.Stage == Stage.Unconfirmed)
+                                                            {
+                                                                <span class="ml-1 badge badge-pill badge-danger">@project.Stage</span>
+                                                            }
+                                                            @if (project.Stage == Stage.Completed)
+                                                            {
+                                                                <span class="ml-1 badge badge-pill badge-success">@project.Stage</span>
+                                                            }
+                                                            @if (project.Stage == Stage.New)
+                                                            {
+                                                                <span class="ml-1 badge badge-pill badge-warning">@project.Stage</span>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            <span @(project.ClientCompany == null ? "hidden" : "")>
+                                                                @project.ClientCompany  <br />
+                                                            </span>
+                                                            <a href="mailto:@project.ClientEmail ?Subject=ToDoList message &body=Project: Id: @project.Id, Title: @project.Title"><small class="text-info"><i class="far fa-envelope"></i> @project.ClientEmail</small></a>
+                                                        </td>
+                                                        <td>
+                                                            <div @(project.ScrumMaster.Email == null ? "hidden" : "")>
+                                                                @project.ScrumMaster.Name @project.ScrumMaster.Surname
+                                                                <br />
+                                                                <a href="mailto:@project.ScrumMaster.Email ?Subject=ToDoList message &body=Project: Id: @project.Id, Title: @project.Title"><small class="text-info"><i class="far fa-envelope"></i> @project.ScrumMaster.Email</small></a>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            @if (project.Completeness > 0)
+                                                            {
+                                                                <div class="progress rounded-pill">
+                                                                    <div class="progress-bar bg-success" role="progressbar" style="width: @project.Completeness%;" aria-valuenow="@project.Completeness" aria-valuemin="0" aria-valuemax="100">@project.Completeness%</div>
+                                                                </div>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (project.Duration > 30)
+                                                            {
+                                                                <span>@(project.Duration / 30) months</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span> @project.Duration days </span>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (project.TillDeadline > 30)
+                                                            {
+                                                                <span>@(project.TillDeadline / 30) months</span>
+                                                            }
+                                                            else if (project.TillDeadline > 0)
+                                                            {
+                                                                <span><span class="ml-1 badge bg-warning">!</span>  @project.TillDeadline days</span>
+                                                            }
+                                                            else if (project.TillDeadline == 0)
+                                                            {
+                                                                <span><span class="ml-1 badge bg-danger">!</span>Ends today</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span> <span class="ml-1 badge bg-danger">Late</span> @(project.TillDeadline * -1) days  </span>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (project.Completeness == 100 && project.Stage != Stage.Completed)
+                                                            {
+                                                                <form method="post" asp-controller="Projects" asp-action="MarkAsCompleted" class="form-inline">
+                                                                    <input asp-for="@Model.SelectedProjectId" value="@project.Id" hidden />
+                                                                    <button type="submit" class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
+                                                                </form>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+                        <div class="card @(@Model.IsScrumMasterCount == 0 ? "collapsed-card" : "")">
+                            <div class="card-header border-transparent bg-gradient-success">
+                                <h3 class="card-title">Scrum Master</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas @(@Model.IsScrumMasterCount == 0 ? "fa-plus" : "fa-minus")"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0">
+                                @if (@Model.IsScrumMasterCount == 0)
+                                {
+                                    <p class="ml-4">No projects</p>
+                                }
+                                else
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Project Title</th>
+                                                    <th>Project Owner</th>
+                                                    <th>Team</th>
+                                                    <th>Completeness</th>
+                                                    <th>Duration</th>
+                                                    <th>Till deadline</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var project in Model.IsScrumMasterList)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <a asp-area="UserDashboard" asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id">@project.Title</a>
+                                                            @if (project.Stage == Stage.Unconfirmed)
+                                                            {
+                                                                <span class="ml-1 badge badge-pill badge-danger">@project.Stage</span>
+                                                            }
+                                                            @if (project.Stage == Stage.Completed)
+                                                            {
+                                                                <span class="ml-1 badge badge-pill badge-success">@project.Stage</span>
+                                                            }
+                                                            @if (project.Stage == Stage.New)
+                                                            {
+                                                                <span class="ml-1 badge badge-pill badge-warning">@project.Stage</span>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            <div @(project.ProjectOwner.Email == null ? "hidden" : "")>
+                                                                @project.ProjectOwner.Name @project.ProjectOwner.Surname
+                                                                <br />
+                                                                <a href="mailto:@project.ProjectOwner.Email ?Subject=ToDoList message &body=Project: Id: @project.Id, Title: @project.Title"><small class="text-info"><i class="far fa-envelope"></i> @project.ProjectOwner.Email</small></a>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            @foreach (var person in project.Team)
+                                                            {
+                                                                <partial name="_ProjectTeamMemberModal" model="person" />
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (project.Completeness > 0)
+                                                            {
+                                                                <div class="progress rounded-pill">
+                                                                    <div class="progress-bar bg-success" role="progressbar" style="width: @project.Completeness%;" aria-valuenow="@project.Completeness" aria-valuemin="0" aria-valuemax="100">@project.Completeness%</div>
+                                                                </div>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (project.Duration > 30)
+                                                            {
+                                                                <span>@(project.Duration / 30) months</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span> @project.Duration days </span>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (project.TillDeadline > 30)
+                                                            {
+                                                                <span>@(project.TillDeadline / 30) months</span>
+                                                            }
+                                                            else if (project.TillDeadline > 0)
+                                                            {
+                                                                <span><span class="ml-1 badge bg-warning">!</span>  @project.TillDeadline days</span>
+                                                            }
+                                                            else if (project.TillDeadline == 0)
+                                                            {
+                                                                <span><span class="ml-1 badge bg-danger">!</span>Ends today</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span> <span class="ml-1 badge bg-danger">Late</span> @(project.TillDeadline * -1) days  </span>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+                        <div class="card @(@Model.IsInTeamCount == 0 ? "collapsed-card" : "")">
+                            <div class="card-header border-transparent bg-gradient-warning">
+                                <h3 class="card-title">In Teams</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas @(@Model.IsInTeamCount == 0 ? "fa-plus" : "fa-minus")"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0">
+                                @if (@Model.IsInTeamCount == 0)
+                                {
+                                    <p class="ml-4">No projects</p>
+                                }
+                                else
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Project Title</th>
+                                                    <th>Client</th>
+                                                    <th>Project Owner</th>
+                                                    <th>Scrum Master</th>
+                                                    <th>Completeness</th>
+                                                    <th>Duration</th>
+                                                    <th>Till deadline</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var project in Model.IsInTeamList)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <a asp-area="UserDashboard" asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id">@project.Title</a>
+                                                            @if (project.Stage == Stage.Unconfirmed)
+                                                            {
+                                                                <span class="ml-1 badge badge-pill badge-danger">@project.Stage</span>
+                                                            }
+                                                            @if (project.Stage == Stage.Completed)
+                                                            {
+                                                                <span class="ml-1 badge badge-pill badge-success">@project.Stage</span>
+                                                            }
+                                                            @if (project.Stage == Stage.New)
+                                                            {
+                                                                <span class="ml-1 badge badge-pill badge-warning">@project.Stage</span>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            <span @(project.ClientCompany == null ? "hidden" : "")>
+                                                                @project.ClientCompany  <br />
+                                                            </span>
+                                                            <a href="mailto:@project.ClientEmail ?Subject=ToDoList message &body=Project: Id: @project.Id, Title: @project.Title"><small class="text-info"><i class="far fa-envelope"></i> @project.ClientEmail</small></a>
+                                                        </td>
+                                                        <td>
+                                                            <div @(project.ProjectOwner.Email == null ? "hidden" : "")>
+                                                                @project.ProjectOwner.Name @project.ProjectOwner.Surname
+                                                                <br />
+                                                                <a href="mailto:@project.ProjectOwner.Email ?Subject=ToDoList message &body=Project: Id: @project.Id, Title: @project.Title"><small class="text-info"><i class="far fa-envelope"></i> @project.ProjectOwner.Email</small></a>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div @(project.ScrumMaster.Email == null ? "hidden" : "")>
+                                                                @project.ScrumMaster.Name @project.ScrumMaster.Surname
+                                                                <br />
+                                                                <a href="mailto:@project.ScrumMaster.Email ?Subject=ToDoList message &body=Project: Id: @project.Id, Title: @project.Title"><small class="text-info"><i class="far fa-envelope"></i> @project.ScrumMaster.Email</small></a>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            @if (project.Completeness > 0)
+                                                            {
+                                                                <div class="progress rounded-pill">
+                                                                    <div class="progress-bar bg-success" role="progressbar" style="width: @project.Completeness%;" aria-valuenow="@project.Completeness" aria-valuemin="0" aria-valuemax="100">@project.Completeness%</div>
+                                                                </div>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (project.Duration > 30)
+                                                            {
+                                                                <span>@(project.Duration / 30) months</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span> @project.Duration days </span>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (project.TillDeadline > 30)
+                                                            {
+                                                                <span>@(project.TillDeadline / 30) months</span>
+                                                            }
+                                                            else if (project.TillDeadline > 0)
+                                                            {
+                                                                <span><span class="ml-1 badge bg-warning">!</span>  @project.TillDeadline days</span>
+                                                            }
+                                                            else if (project.TillDeadline == 0)
+                                                            {
+                                                                <span><span class="ml-1 badge bg-danger">!</span>Ends today</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span> <span class="ml-1 badge bg-danger">Late</span> @(project.TillDeadline * -1) days  </span>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+                        <div class="card text-muted @(@Model.CompletedCount == 0 ? "collapsed-card" : "")">
+                            <div class="card-header border-transparent bg-gradient-light">
+                                <h3 class="card-title">Completed projects</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas @(@Model.CompletedCount == 0 ? "fa-plus" : "fa-minus")"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0">
+                                @if (@Model.CompletedCount == 0)
+                                {
+                                    <p class="ml-4">No projects</p>
+                                }
+                                else
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Project Title</th>
+                                                    <th>Client</th>
+                                                    <th>Project Owner</th>
+                                                    <th>Scrum Master</th>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
+                                                    <th>Duration</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var project in Model.CompletedList)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <a asp-area="UserDashboard" asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id">@project.Title</a>
+                                                        </td>
+                                                        <td>
+                                                            <span @(project.ClientCompany == null ? "hidden" : "")>
+                                                                @project.ClientCompany  <br />
+                                                            </span>
+                                                            <a href="mailto:@project.ClientEmail ?Subject=ToDoList message &body=Project: Id: @project.Id, Title: @project.Title"><small class="text-info"><i class="far fa-envelope"></i> @project.ClientEmail</small></a>
+                                                        </td>
+                                                        <td>
+                                                            <div @(project.ProjectOwner.Email == null ? "hidden" : "")>
+                                                                @project.ProjectOwner.Name @project.ProjectOwner.Surname
+                                                                <br />
+                                                                <a href="mailto:@project.ProjectOwner.Email ?Subject=ToDoList message &body=Project: Id: @project.Id, Title: @project.Title"><small class="text-info"><i class="far fa-envelope"></i> @project.ProjectOwner.Email</small></a>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div @(project.ScrumMaster.Email == null ? "hidden" : "")>
+                                                                @project.ScrumMaster.Name @project.ScrumMaster.Surname
+                                                                <br />
+                                                                <a href="mailto:@project.ScrumMaster.Email ?Subject=ToDoList message &body=Project: Id: @project.Id, Title: @project.Title"><small class="text-info"><i class="far fa-envelope"></i> @project.ScrumMaster.Email</small></a>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            @project.StartDate.ToString().Substring(0, 10)
+                                                        </td>
+                                                        <td>
+                                                            @project.EndDate.ToString().Substring(0, 10)
+                                                        </td>
+                                                        <td>
+                                                            @if (project.Duration > 30)
+                                                            {
+                                                                <span>@(project.Duration / 30) months</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span> @project.Duration days </span>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.col -->
+
+            <div class="col-md-3">
+                <!-- /.card -->
+                <!-- ASSIGNED TASKS LIST -->
+                <div class="card @(@Model.AssignedTasksCount == 0 ? "collapsed-card" : "")">
+                    <div class="card-header border-transparent bg-gradient-danger">
+                        <h3 class="card-title">Assigned Tasks</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas @(@Model.AssignedTasksCount == 0 ? "fa-plus" : "fa-minus")"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <ul class="products-list product-list-in-card pl-2 pr-2">
+                            @if (@Model.AssignedTasksCount == 0)
+                            {
+                                <li>
+                                    <p class="ml-4">No tasks</p>
+                                </li>
+                            }
+                            else
+                            {
+                                @foreach (var task in Model.AssignedTasksList)
+                                {
+                                    <li class="item">
+                                        <div class="product-info" style="margin-left: .8em;">
+                                            <span class="product-title text-primary">
+                                                @task.Title
+                                            </span>
+                                            @if (task.Priority == Priority.Critical)
+                                            {
+                                                <span class="badge badge-danger">@task.Priority</span>
+                                            }
+                                            else if (task.Priority == Priority.High)
+                                            {
+                                                <span class="badge badge-warning">@task.Priority</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-light">@task.Priority</span>
+                                            }
+
+                                            <div class="float-right">
+                                                @if (task.Status == Status.New)
+                                                {
+                                                    <form method="post" asp-controller="Tasks" asp-action="MarkInProgress" class="form-inline float-left">
+                                                        <input asp-for="@Model.SelectedTaskId" value="@task.Id" hidden />
+                                                        <button type="submit" class="btn btn-sm btn-outline-warning border-0" data-toggle="tooltip" data-placement="top" title="Mark as In Progress"><i class="fas fa-pen"></i></button>
+                                                    </form>
+                                                }
+                                                <form method="post" asp-controller="Tasks" asp-action="MarkDone" class="form-inline float-right">
+                                                    <input asp-for="@Model.SelectedTaskId" value="@task.Id" hidden />
+                                                    <button type="submit" class="btn btn-sm btn-outline-success border-0" data-toggle="tooltip" data-placement="top" title="Mark as Done"><i class="fas fa-check"></i></button>
+                                                </form>
+                                            </div>
+
+                                            <small class="product-description">
+                                                Project: @task.Project.Title
+                                            </small>
+                                            <small class="product-description">
+                                                Evaluation: @task.Evaluation points
+                                            </small>
+                                            <small class="product-description">
+                                                Status: @task.Status
+                                            </small>
+                                            <small class="product-description">
+                                                Start: <span class="text-dark mr-3">@task.Created.ToString().Substring(0, 10)</span>
+                                                Till Date: <span class="text-dark">@task.TillDate.ToString().Substring(0, 10)</span>
+                                            </small>
+                                            <small class="product-description">
+                                                @task.Description
+                                            </small>
+                                        </div>
+                                    </li>
+                                    <!-- /.item -->
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- DONE TASKS LIST -->
+                <div class="card collapsed-card">
+                    <div class="card-header border-transparent bg-gradient-light">
+                        <h3 class="card-title">Done Tasks</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <ul class="products-list product-list-in-card pl-2 pr-2">
+                            @if (@Model.DoneTasksCount == 0)
+                            {
+                                <li>
+                                    <p class="ml-4">No tasks</p>
+                                </li>
+                            }
+                            else
+                            {
+                                @foreach (var task in Model.DoneTasksList)
+                                {
+                                    <li class="item">
+                                        <div class="product-info" style="margin-left: .8em;">
+                                            <span class="product-title text-primary">
+                                                @task.Title
+                                            </span>
+                                            <small class="product-description">
+                                                Project: @task.Project.Title
+                                            </small>
+                                            <small class="product-description">
+                                                Evaluation: @task.Evaluation points
+                                            </small>
+                                        </div>
+                                    </li>
+                                    <!-- /.item -->
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!--  TASKS BACKLOG LIST -->
+                <div class="card">
+                    <div class="card-header border-transparent bg-gradient-primary">
+                        <h3 class="card-title">Backlog</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <ul class="products-list product-list-in-card pl-2 pr-2">
+                            @if (@Model.BacklogCount == 0)
+                            {
+                                <li>
+                                    <p class="ml-4">No tasks</p>
+                                </li>
+                            }
+                            else
+                            {
+                                @foreach (var task in Model.Backlog)
+                                {
+                                    <li class="item">
+                                        <div class="product-info" style="margin-left: .8em;">
+                                            <span class="product-title text-primary">
+                                                @task.Title
+                                            </span>
+                                            @if (task.Priority == Priority.Critical)
+                                            {
+                                                <span class="badge badge-danger">@task.Priority</span>
+                                            }
+                                            else if (task.Priority == Priority.High)
+                                            {
+                                                <span class="badge badge-warning">@task.Priority</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-light">@task.Priority</span>
+                                            }
+                                            <form method="post" asp-controller="Tasks" asp-action="FromBackLog" class="form-inline float-right">
+                                                <input asp-for="@Model.SelectedTaskId" value="@task.Id" hidden />
+                                                <button type="submit" class="btn btn-sm btn-outline-primary border-0" data-toggle="tooltip" data-placement="top" title="Get task from Backlog"><i class="fas fa-plus"></i></button>
+                                            </form>
+                                            <small class="product-description">
+                                                Project: @task.Project.Title
+                                            </small>
+                                            <small class="product-description">
+                                                Evaluation: @task.Evaluation points
+                                            </small>
+                                            <small class="product-description">
+                                                Status: @task.Status
+                                            </small>
+                                            <small class="product-description">
+                                                Start: <span class="text-dark mr-3">@task.Created.ToString().Substring(0, 10)</span>
+                                                Till Date: <span class="text-dark">@task.TillDate.ToString().Substring(0, 10)</span>
+                                            </small>
+                                            <small class="product-description">
+                                                @task.Description
+                                            </small>
+                                        </div>
+                                    </li>
+                                    <!-- /.item -->
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content -->

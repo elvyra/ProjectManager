@@ -1,0 +1,179 @@
+﻿@using ToDoList.Domains.Enums
+
+@model MainDashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Admin Dashboard</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active">Home</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left col -->
+            <div class="col-12">
+                <!-- /.card -->
+                <div class="row">
+                    <div class="col">
+                        <!-- TABLE: PROJECT OWNER -->
+                        <div class="card @(@Model.AllProjects.Count == 0 ? "collapsed-card" : "")">
+                            <div class="card-header border-transparent bg-gradient-info">
+                                <h3 class="card-title">Projects List</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas @(@Model.AllProjects.Count == 0 ? "fa-plus" : "fa-minus")"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0">
+                                @if (@Model.AllProjects.Count == 0)
+                                {
+                                    <p class="ml-4">No projects</p>
+                                }
+                                else
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <a asp-action="Index" asp-route-sortOrder="@ViewBag.TitleSortParm" class="text-info">Project Title <i class="fas fa-sort ml-2"></i></a>
+                                                    </th>
+                                                    <th><a asp-action="Index" asp-route-sortOrder="@ViewBag.StageSortParm" class="text-info">Stage<i class="fas fa-sort ml-2"></i></a></th>
+                                                    <th>Client</th>
+                                                    <th>Project Owner</th>
+                                                    <th>Scrum Master</th>
+                                                    <th>Team</th>
+                                                    <th>Tasks</th>
+                                                    <th>
+                                                        <a asp-action="Index" asp-route-sortOrder="@ViewBag.StartSortParm" class="text-info">Start Date <i class="fas fa-sort ml-2"></i></a>
+                                                    </th>
+                                                    <th>
+                                                        <a asp-action="Index" asp-route-sortOrder="@ViewBag.EndSortParm" class="text-info">End Date <i class="fas fa-sort ml-2"></i></a>
+                                                    </th>
+                                                    <th>Is public</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var project in Model.AllProjects)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @project.Title
+                                                        </td>
+                                                        <td>
+                                                            @if (project.Stage == Stage.Unconfirmed)
+                                                            {
+                                                                <span class="ml-1 badge badge-pill badge-danger">@project.Stage</span>
+                                                            }
+                                                            else if (project.Stage == Stage.Completed)
+                                                            {
+                                                                <span class="ml-1 badge badge-pill badge-success">@project.Stage</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="ml-1 badge badge-pill badge-light">@project.Stage</span>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            <span @(project.ClientCompany == null ? "hidden" : "")>
+                                                                @project.ClientCompany  <br />
+                                                            </span>
+                                                            <a href="mailto:@project.ClientEmail ?Subject=ToDoList message from Admin&body=Project: Id: @project.Id, Title: @project.Title"><small class="text-info"><i class="far fa-envelope"></i> @project.ClientEmail</small></a>
+                                                        </td>
+                                                        <td>
+                                                            @if (project.ProjectOwner != null)
+                                                            {
+                                                                <span @(string.IsNullOrEmpty(project.ProjectOwner.Name) && string.IsNullOrEmpty(project.ProjectOwner.Surname) ? "hidden" : "")>
+                                                                    @project.ProjectOwner.Name @project.ProjectOwner.Surname  <br />
+                                                                </span>
+                                                                <a href="mailto:@project.ProjectOwner.Email ?Subject=ToDoList message from Admin&body="><small class="text-info"><i class="far fa-envelope"></i> @project.ProjectOwner.Email</small></a>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (project.ScrumMaster != null)
+                                                            {
+                                                                <span @(string.IsNullOrEmpty(project.ScrumMaster.Name) && string.IsNullOrEmpty(project.ScrumMaster.Surname) ? "hidden" : "")>
+                                                                    @project.ScrumMaster.Name @project.ScrumMaster.Surname  <br />
+                                                                </span>
+                                                                <a href="mailto:@project.ScrumMaster.Email ?Subject=ToDoList message from Admin&body="><small class="text-info"><i class="far fa-envelope"></i> @project.ScrumMaster.Email</small></a>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (project.Team.Count() > 0)
+                                                            {
+                                                                @project.Team.Count()
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (project.Tasks.Count() > 0)
+                                                            {
+                                                                @project.Tasks.Count()
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @project.StartDate.ToString().Substring(0, 10)
+                                                        </td>
+                                                        <td>
+                                                            @project.EndDate.ToString().Substring(0, 10)
+                                                        </td>
+                                                        <td>
+                                                            @if (@project.IsPublic)
+                                                            {
+                                                                <i class="fas fa-globe-americas text-info"></i>
+                                                            }
+                                                        </td>
+                                                        <td>                                                            
+                                                            <form method="post" asp-controller="Home" asp-action="DeleteProject" class="form-inline">
+                                                                <input asp-for="@Model.SelectedProjectId" value="@project.Id" hidden />
+                                                                <button type="submit" class="btn btn-sm btn-outline-danger border-0"><i class="fas fa-trash"></i></button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+
+
+                    </div>
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.col -->
+
+
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content -->

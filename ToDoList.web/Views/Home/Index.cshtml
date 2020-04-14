@@ -1,0 +1,81 @@
+﻿<header>
+    <nav class="navbar navbar-expand-lg navbar-dark pb_navbar pb_scrolled-light" id="pb-navbar">
+        <partial name="_TopMenuPartial" />
+    </nav>
+</header>
+
+<section class="pb_cover_v3 overflow-hidden cover-bg-indigo cover-bg-opacity text-left pb_gradient_v1 pb_slant-light" id="section-home">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-md-6">
+                <h2 class="heading mb-3">ToDoList makes you faster</h2>
+                <div class="sub-heading">
+                    <p class="mb-4">This is new, fast and free tool to manage your projects and portfolio website in one dashboard.</p>
+                    <p class="mb-4">Just seed demo data to database and scroll down to make sure, this is the tool you are searching for.</p>
+                    <p class="mb-5">
+                        <a class="btn btn-success btn-lg pb_btn-pill smoothscroll" asp-area="" asp-controller="Home" asp-action="SeedDemoData"><span class="pb_font-14 text-uppercase pb_letter-spacing-1">Seed demo data</span></a>
+                        <a class="btn btn-link btn-lg pb_btn-pill smoothscroll border-0" asp-area="" asp-controller="Home" asp-action="ClearDatabase"><span class="pb_font-14 text-uppercase pb_letter-spacing-1">Clear database</span></a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-5 relative align-self-center">
+                <partial name="_formRegister" />
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END section -->
+
+<partial name="_sectionFeatures" />
+
+<partial name="_sectionTeam" />
+
+<partial name="_sectionProjects" />
+
+<partial name="_sectionFAQ" />
+
+
+<section class="pb_xl_py_cover overflow-hidden pb_slant-light pb_gradient_v1 cover-bg-opacity-8" style="background-image: url(assets/images/1900x1200_img_5.jpg)">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-md-5 justify-content-center">
+                <h2 class="heading mb-5 pb_font-40">Join over 1K+ people who uses ToDoList</h2>
+                <div class="sub-heading">
+                    <p class="mb-4">New, fast and free tool to manage your projects and website in one dashboard.</p>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
+                <partial name="_formRegister" />
+            </div>
+        </div>
+    </div>
+</section>
+    
+<!-- END section -->
+
+<footer class="pb_footer bg-light" role="contentinfo">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col">
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="https://www.facebook.com/elvyra.sabaliauskiene.3" target="_blank" class="p-2"><i class="fa fa-facebook"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/elvyra-sabaliauskiene/" target="_blank" class="p-2"><i class="fa fa-linkedin"></i></a></li>
+                    <li class="list-inline-item"><a href="mailto:elvyra.sabaliauskiene@gmail.com?subject=ToDoList" target="_blank" class="p-2"><i class="fa fa-envelope"></i></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <p class="pb_font-14">
+                    &copy; 2019. All Rights Reserved.
+                    <br>Free Bootstrap UI Template  <a href="https://uicookies.com/bootstrap-html-templates/" target="_blank">Landing</a> by uiCookies
+                    <br>Free Admin Dashboard Template  <a href="https://adminlte.io/" target="_blank">AdminLTE</a>
+                </p>
+                <p class="pb_font-14">Demo Images: <a href="https://www.freepik.com/" target="_blank" rel="nofollow">freepik</a></p>
+            </div>
+        </div>
+    </div>
+</footer>

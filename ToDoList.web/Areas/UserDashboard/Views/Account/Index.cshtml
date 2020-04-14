@@ -1,0 +1,105 @@
+﻿@model UserViewModel
+
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Areas/UserDashboard/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Profile</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">User Profile</li>
+                </ol>
+            </div>
+            <div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img class="profile-user-img img-fluid img-circle"
+                                 src="~/dist/img/user2-160x160.jpg"
+                                 alt="User profile picture">
+                        </div>
+
+                        <h3 class="profile-username text-center">@Model.Name @Model.Surname</h3>
+
+                        <p class="text-muted text-center">@Model.Email</p>
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>As Project Owner</b> <a class="float-right">@Model.IsProjectOwnerCount</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>As Scrum Master</b> <a class="float-right">@Model.IsScrumMasterCount</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>In Teams</b> <a class="float-right">@Model.IsInTeamCount</a>
+                            </li>
+                        </ul>
+
+                        <a asp-action="Edit" class="btn btn-primary btn-block"><b>Edit</b></a>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">About Me</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <strong><i class="fas fa-book mr-1"></i> Education</strong>
+                        <p class="text-muted">@Model.Education</p>
+
+                        <hr>
+
+                        <strong><i class="fas fa-map-marker-alt mr-1"></i> Address</strong>
+                        <p class="text-muted">@Model.Address</p>
+
+                        <hr>
+
+                        <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
+                        <p class="text-muted">@Model.Skills</p>
+
+                        <hr>
+
+                        <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
+                        <p class="text-muted">@Model.Notes</p>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+

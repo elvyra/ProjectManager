@@ -1,0 +1,66 @@
+﻿@model IEnumerable<MyProjectViewModel>
+
+    <div class="table-responsive">
+        <table class="table m-0">
+            <thead>
+                <tr>
+                    <th>Project Title</th>
+                    <th>Project Owner</th>
+                    <th>Started On</th>
+                    <th>Duration</th>
+                    <th>Till deadline</th>
+                    <th>Is Public</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var project in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id">@project.Title</a>
+                        </td>
+                        <td>
+                            @project.ProjectOwnerName @project.ProjectOwnerSurname
+                            <br />
+                            <a href="mailto:@project.ProjectOwnerEmail ?Subject=ToDoList message from Client @project.ClientEmail &body=Project: Id: @project.Id, Title: @project.Title"><small class="text-info"><i class="far fa-envelope"></i> @project.ProjectOwnerEmail</small></a>
+                        </td>
+                        <td>
+                            @project.StartDate.ToString().Substring(0, 10)
+                        </td>
+                        <td>
+                            @if (project.Duration > 30)
+                            {
+                                <span>@(project.Duration / 30) months</span>
+                            }
+                            else
+                            {
+                                <span> @project.Duration days </span>
+                            }
+                        </td>
+                        <td>
+                            @if (project.TillDeadline > 30)
+                            {
+                                <span>@(project.TillDeadline) months</span>
+                            }
+                            else if (project.TillDeadline > 0)
+                            {
+                                <span><span class="ml-1 badge bg-warning">!</span>  @project.TillDeadline days</span>
+                            }
+                            else if (project.TillDeadline == 0)
+                            {
+                                <span><span class="ml-1 badge bg-danger">!</span>Ends today</span>
+                            }
+                            else
+                            {
+                                <span> <span class="ml-1 badge bg-danger">Late</span> @(project.TillDeadline * -1) days  </span>
+                            }
+                        </td>
+                        <td>
+                            <input type="checkbox" name="IsPublic" checked="@project.IsPublic" disabled>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>

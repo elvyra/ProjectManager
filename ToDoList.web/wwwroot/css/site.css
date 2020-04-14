@@ -1,0 +1,148 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification */
+
+/* Smooth scrolling enabled */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Our team (testimonials) section quote mark pozition fixes*/
+.testimonial_v1.pb_quote_v2 .quote {
+    left: auto;
+    margin-left: -1.5rem;
+}
+
+/* White space correction between sections */
+.pb_section {
+    padding: 5em 0;
+}
+
+.pb_slant-light:after,
+.pb_slant-white:after {
+    height: 100px;
+    bottom: -50px;
+    transform: rotate(-2deg);
+}
+
+/* Erorr page design */
+#error {
+    position: relative;
+    height: 100vh;
+}
+
+    #error .error {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+.error {
+    max-width: 520px;
+    width: 100%;
+    line-height: 1.4;
+    text-align: center;
+}
+
+    .error .error-code {
+        position: relative;
+        height: 200px;
+        margin: 0px auto 20px;
+        z-index: -1;
+    }
+
+        .error .error-code h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 236px;
+            font-weight: 200;
+            margin: 0px;
+            color: #211b19;
+            color: #27c2de;
+            text-transform: uppercase;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .error .error-code h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 400;
+            text-transform: uppercase;
+            color: #211b19;
+            background: #fff;
+            padding: 10px 5px;
+            margin: auto;
+            display: inline-block;
+            position: absolute;
+            bottom: 0px;
+            left: 0;
+            right: 0;
+        }
+
+    .error a {
+        font-family: 'Montserrat', sans-serif;
+        display: inline-block;
+        font-weight: 700;
+        text-decoration: none;
+        text-transform: uppercase;
+        padding: 13px 23px;
+        font-size: 18px;
+        -webkit-transition: 0.2s all;
+        transition: 0.2s all;
+        border-radius: 50px;
+    }
+
+        .error a:first-of-type {
+            color: #fff;
+            background: #665fee;
+            /* Old browsers */
+            background: -moz-linear-gradient(45deg, #665fee 0%, #27c2de 100%);
+            /* FF3.6-15 */
+            background: -webkit-linear-gradient(45deg, #665fee 0%, #27c2de 100%);
+            /* Chrome10-25,Safari5.1-6 */
+            background: -o-linear-gradient(45deg, #665fee 0%, #27c2de 100%);
+            background: linear-gradient(45deg, #665fee 0%, #27c2de 100%);
+            /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        }
+
+        .error a:last-of-type {
+            color: #27c2de;
+            border: #27c2de solid 3px;
+            padding: 10px 20px;
+        }
+
+        .error a:hover {
+            background: #27c2de;
+            color: #fff;
+        }
+
+@media only screen and (max-width: 767px) {
+    .error .error-code h1 {
+        font-size: 148px;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .error .error-code {
+        height: 148px;
+        margin: 0px auto 10px;
+    }
+
+        .error .error-code h1 {
+            font-size: 86px;
+        }
+
+        .error .error-code h2 {
+            font-size: 16px;
+        }
+
+    .error a {
+        padding: 7px 15px;
+        font-size: 14px;
+    }
+}

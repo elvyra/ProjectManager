@@ -1,0 +1,123 @@
+﻿@model UserViewModel
+
+@{
+    ViewData["Title"] = "Edit Admin Profile";
+    Layout = "~/Areas/AdminDashboard/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Edit User Profile </h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Edit User Profile</li>
+                </ol>
+            </div>
+            <div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <form method="post" asp-area="AdminDashboard" asp-controller="Account" asp-action="Edit">
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">General</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label asp-for="Name" for="inputUserName"></label>
+                            <input asp-for="Name" id="inputUserName" class="form-control">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Surname" for="inputUserSurname"></label>
+                            <input asp-for="Surname" id="inputUserSurname" class="form-control">
+                            <span asp-validation-for="Surname" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Email" for="inputUserEmail"></label>
+                            <input asp-for="Email" id="inputUserEmail" class="form-control" readonly>
+                            <span asp-validation-for="Email " class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <small class="form-text text-muted">Name, Surname fiels are not required.</small>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <div class="col-md-6">
+                <div class="card card-secondary">
+                    <div class="card-header">
+                        <h3 class="card-title">About me</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <i class="fas fa-book mr-1"></i>
+                            <label asp-for="Education" for="inputEducation"></label>
+                            <textarea asp-for="Education" id="inputEducation" class="form-control" rows="2"></textarea>
+                            <span asp-validation-for="Education" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            <label asp-for="Address" for="inputAddress"></label>
+                            <textarea asp-for="Address" id="inputAddress" class="form-control" rows="2"></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <i class="fas fa-pencil-alt mr-1"></i>
+                            <label asp-for="Skills" for="inputSkills"></label>
+                            <textarea asp-for="Skills" id="inputSkills" class="form-control" rows="2"></textarea>
+                            <span asp-validation-for="Skills" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <i class="far fa-file-alt mr-1"></i>
+                            <label asp-for="Notes" for="inputNotes"></label>
+                            <textarea asp-for="Notes" id="inputProjectDescription" class="form-control" rows="2"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <small class="form-text text-muted">About me section fields are not required.</small>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancel</a>
+                <input type="submit" value="Save" class="btn btn-success float-right">
+            </div>
+        </div>
+    </form>
+</section>
+<!-- /.content -->

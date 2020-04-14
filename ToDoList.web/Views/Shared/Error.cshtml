@@ -1,0 +1,42 @@
+﻿@using ToDoList.web.Models.Enums
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div id="error">
+    <div class="error">
+        @if (Model != null)
+        {
+            <div class="error-code">
+                <h1>Oops!</h1>
+                @if (Model.ShowErrorCode || Model.ShowErrorCode)
+                {
+                    <h2> @(Model.ShowErrorCode ? @Model.ErrorCode.ToString() : "") @(Model.ShowErrorText ? "-" + @Model.ErrorText : "")</h2>
+                }
+                else
+                {
+                    <h2>404 - The Page can't be found</h2>
+                }
+            </div>
+
+            @if (Model.ShowRequestId)
+            {
+                <p>
+                    Request ID: <code class="text-@Model.ErrorStatus.ToString()" style="opacity:.85;">@Model.RequestId</code>
+                </p>
+            }
+        }
+        else
+        {
+            <div class="error-code">
+                <h1>Oops!</h1>
+                <h2>404 - The Page can't be found miau</h2>
+            </div>
+        }
+
+        <a href="javascript:history.back()" class="mr-3">Go Back</a>
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="">Go to Home page</a>
+
+    </div>
+</div>

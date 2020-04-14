@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ToDoList.Data\ToDoList.Data.csproj" />
+    <ProjectReference Include="..\ToDoList.Domains\ToDoList.Domains.csproj" />
+  </ItemGroup>
+
+</Project>

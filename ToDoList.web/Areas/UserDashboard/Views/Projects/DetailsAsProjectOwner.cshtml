@@ -1,0 +1,285 @@
+﻿@model DetailsProjectAsProjectOwnerViewModel
+@using ToDoList.Domains.Enums
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/UserDashboard/Views/Shared/_Layout.cshtml";
+
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Project Detail</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Project Detail</li>
+                </ol>
+            </div>
+            <div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-primary" style="font-size: 1.4em;">@Model.Title</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-7">
+                    <p class="text-muted">@Model.Description</p>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 col-lg-4">
+                                <h5 class="mt-5 text-muted">Client Info</h5>
+                                <div class="text-muted">
+                                    <p class="text-sm">
+                                        Client Company
+                                        <b class="d-block">@Model.ClientCompany</b>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <h5 class="mt-5 text-muted">Project Team Info</h5>
+                                <div class="text-muted">
+                                    <p class="text-sm">
+                                        Scrum Master
+                                        <b class="d-block">@Model.ScrumMaster.Name @Model.ScrumMaster.Surname</b>
+                                        <a class="text-primary" href="mailto:@Model.ScrumMaster.Email ?Subject=ToDoList message from Project Owner&body=Project: Id: @Model.Id, Title: @Model.Title">
+                                            <i class="@(@Model.ScrumMaster.Email.Length > 0 ? "far fa-envelope" : "")"></i> @Model.ScrumMaster.Email
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <h5 class="mt-5 text-muted">Terms</h5>
+                                <div class="text-muted">
+                                    <p class="text-sm">
+                                        Project Start Date
+                                        <b class="d-block">@Model.StartDate.ToString().Substring(0, 10)</b>
+                                    </p>
+                                    <p class="text-sm">
+                                        Project End Date
+                                        <b class="d-block">@Model.EndDate.ToString().Substring(0, 10)</b>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-12 offset-lg-1 col-lg-4 ">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">Project Status</span>
+                                    <span class="info-box-number text-center text-muted mb-0">@(Model.Stage == Stage.InProgress ? "In Progress" : Model.Stage.ToString())</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">Done / Total Tasks</span>
+                                    <span class="info-box-number text-center text-muted mb-0">@Model.DoneTasksCount / @Model.TotalTasksCount</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted ">Number of Team Members</span>
+                                    <span class="info-box-number text-center text-muted mb-0">@Model.TeamMembersCount</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-left mt-5 mb-3">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancel</a>
+                        @if (Model.Stage != Stage.Completed)
+                        {
+                            <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success float-right">Edit</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-primary" style="font-size: 1.4em;">Tasks</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-7">
+                    <div class="table-responsive">
+                        @if (Model.TotalTasksCount > 0)
+                        {
+                            <table class="table m-0 text-muted">
+                                <thead>
+                                    <tr>
+                                        <th>Task Title</th>
+                                        <th>Priority</th>
+                                        <th>Evaluation</th>
+                                        <th>Status</th>
+                                        <th>Start</th>
+                                        <th>Till deadline</th>
+                                        <th>Assigned To</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var task in Model.TasksList)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <span class="font-weight-bold"> @task.Title </span>
+                                                <small class="product-description">
+                                                    @task.Description
+                                                </small>
+                                            </td>
+                                            <td>
+                                                @if (task.Priority == Priority.Critical)
+                                                {
+                                                    <span class="badge badge-danger">@task.Priority</span>
+                                                }
+                                                else if (task.Priority == Priority.High)
+                                                {
+                                                    <span class="badge badge-warning">@task.Priority</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@task.Priority</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @task.Evaluation
+                                            </td>
+                                            <td>
+                                                @if (task.Status == Status.Done)
+                                                {
+                                                    <span class="badge badge-success">@task.Status</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@task.Status</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @task.Created.ToString().Substring(0, 10)
+                                            </td>
+                                            <td>
+                                                @task.TillDate.ToString().Substring(0, 10)
+                                            </td>
+                                            <td>
+                                                @if (task.AssignedTo != null)
+                                                {
+                                                    <a href="mailto:@task.AssignedTo.Email ?Subject=ToDoList message from Project Owner &body=Task Id: @task.Id Title: @task.Title"><small class="text-info"><i class="far fa-envelope mr-1"></i>@task.AssignedTo.Email</small></a>
+                                                }
+                                            </td>
+                                            <td>
+                                                <form method="post" asp-controller="Tasks" asp-action="Delete" class="form-inline float-right">
+                                                    <input asp-for="@Model.SelectedTaskId" value="@task.Id" hidden />
+                                                    <input asp-for="@Model.SelectedProjectId" value="@task.Project.Id" hidden />
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger border-0" data-toggle="tooltip" data-placement="top" title="Delete Task"><i class="fas fa-trash"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <span>No tasks</span>
+                        }
+                    </div>
+
+                    <div class="text-left mt-5 mb-3">
+                        @if (Model.Stage != Stage.Completed)
+                        {
+                            <partial name="_CreateTaskModal" model="@new TaskViewModel { ProjectId = Model.Id, TillDate = Model.EndDate}"/>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-12 offset-lg-1 col-lg-4 ">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="col-12">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-center text-muted ">Critical Tasks</span>
+                                        <span class="info-box-number text-center text-muted mb-0">@Model.CriticalTasksCount</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">Total Tasks</span>
+                                    <span class="info-box-number text-center text-muted mb-0">@Model.TotalTasksCount</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">Done Tasks</span>
+                                    <span class="info-box-number text-center text-muted mb-0">@Model.DoneTasksCount </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+  </div>
+<!-- /.content-wrapper -->

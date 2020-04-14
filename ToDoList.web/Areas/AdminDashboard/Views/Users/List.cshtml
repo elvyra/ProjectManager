@@ -1,0 +1,258 @@
+﻿@using ToDoList.Domains.Enums
+
+@using Microsoft.AspNetCore.Identity
+
+
+@model UsersListViewModel
+
+@{
+    ViewData["Title"] = "Users and Unregistered profiles list";
+    Layout = "~/Areas/AdminDashboard/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Users and profiles Lists</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active">Users & profiles List</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+
+<div class="content">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@Model.IdentityUsers.Count()</h3>
+                        <p>Users</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-ios-person"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@Model.UnregisteredProfiles.Count()</h3>
+                        <p>Unregistered profiles</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-android-remove-circle"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <!-- Left col -->
+            <div class="col-12">
+                <!-- TABLE: USERS -->
+                <div class="card @(@Model.IdentityUsers.Count() == 0 ? "collapsed-card" : "")">
+                    <div class="card-header border-transparent bg-gradient-info">
+                        <h3 class="card-title">Users</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas @(@Model.IdentityUsers.Count() == 0 ? "fa-plus" : "fa-minus")"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        @if (@Model.IdentityUsers.Count() == 0)
+                        {
+                            <p class="ml-4">No users</p>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table m-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Email</th>
+                                            <th>Role</th>
+                                            <th>Name</th>
+                                            <th>Surname</th>
+                                            <th>As Project Owner</th>
+                                            <th>As Scrum Master</th>
+                                            <th>In Teams</th>
+                                            <th>As Client</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var user in Model.IdentityUsers)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <a href="mailto:@user.Email?Subject=ToDoList message from Admin"><small class="text-info"><i class="far fa-envelope"></i> @user.Email</small></a>
+                                                </td>
+                                                <td>
+                                                    @user.Role
+                                                </td>
+                                                <td>
+                                                    @user.Name
+                                                </td>
+                                                <td>
+                                                    @user.Surname
+                                                </td>
+                                                <td>
+                                                    @if (user.AsProjectOwnerCount > 0)
+                                                    {
+                                                        <span> @user.AsProjectOwnerCount</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (user.AsScrumMasterCount > 0)
+                                                    {
+                                                        <span> @user.AsScrumMasterCount</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (user.AsTeamMemberCount > 0)
+                                                    {
+                                                        <span> @user.AsTeamMemberCount</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (user.AsClientCount > 0)
+                                                    {
+                                                        <span> @user.AsClientCount</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (user.Email != User.Identity.Name)
+                                                    {
+                                                        <form method="post" asp-controller="Users" asp-action="DeleteUser" class="form-inline">
+                                                            <input asp-for="@Model.SelectedUserEmail" value="@user.Email" hidden />
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                        </form>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- TABLE: UNREGISTERED PROFILES -->
+                <div class="card @(@Model.UnregisteredProfiles.Count() == 0 ? "collapsed-card" : "")">
+                    <div class="card-header border-transparent bg-gradient-warning">
+                        <h3 class="card-title">Unregistered profiles</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas @(@Model.UnregisteredProfiles.Count() == 0 ? "fa-plus" : "fa-minus")"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        @if (@Model.UnregisteredProfiles.Count() == 0)
+                        {
+                            <p class="ml-4">No users</p>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table m-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Email</th>
+                                            <th>Name</th>
+                                            <th>Surname</th>
+                                            <th>As Project Owner</th>
+                                            <th>As Scrum Master</th>
+                                            <th>In Teams</th>
+                                            <th>As Client</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var user in Model.UnregisteredProfiles)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <a href="mailto:@user.Email?Subject=ToDoList message from Admin"><small class="text-info"><i class="far fa-envelope"></i> @user.Email</small></a>
+                                                </td>
+                                                <td>
+                                                    @user.Name
+                                                </td>
+                                                <td>
+                                                    @user.Surname
+                                                </td>
+                                                <td>
+                                                    @if (user.AsProjectOwnerCount > 0)
+                                                    {
+                                                        <span> @user.AsProjectOwnerCount</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (user.AsScrumMasterCount > 0)
+                                                    {
+                                                        <span> @user.AsScrumMasterCount</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (user.AsTeamMemberCount > 0)
+                                                    {
+                                                        <span> @user.AsTeamMemberCount</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (user.AsClientCount > 0)
+                                                    {
+                                                        <span> @user.AsClientCount</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (user.AsProjectOwnerCount + user.AsScrumMasterCount + user.AsTeamMemberCount + user.AsClientCount == 0)
+                                                    {
+                                                        <form method="post" asp-controller="Users" asp-action="DeleteProfile" class="form-inline">
+                                                            <input asp-for="@Model.SelectedProfileEmail" value="@user.Email" hidden />
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                        </form>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- /.row -->
+
+            </div>
+            <!-- /.col -->
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content -->

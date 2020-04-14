@@ -1,0 +1,20 @@
+﻿@model PersonMainDashboardViewModel
+<!-- Button trigger modal -->
+
+<button type="button" class="btn btn-outline-info rounded-circle m-1" style="width: 3em; height: 3em; line-height: 1.5em;" data-toggle="modal" data-target="#ModalCenter-@Model.Name-@Model.Surname">
+    @Model.Name.Substring(0, 1)@Model.Surname.Substring(0, 1)
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalCenter-@Model.Name-@Model.Surname" tabindex="-1" role="dialog" aria-labelledby="teamMemberModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                @Model.Name @Model.Surname
+            </div>
+            <div class="modal-body">
+                <a href="mailto:@Model.Email ?Subject=ToDoList message from Scrum Master"><small class="text-info"><i class="far fa-envelope"></i> @Model.Email</small></a>
+            </div>
+        </div>
+    </div>
+</div>

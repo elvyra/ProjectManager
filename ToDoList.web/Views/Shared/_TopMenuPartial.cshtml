@@ -1,0 +1,40 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<div class="container">
+    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ToDoList</a>
+    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#probootstrap-navbar" aria-controls="probootstrap-navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="ion-navicon"></i></span>
+    </button>
+    <div class="collapse navbar-collapse" id="probootstrap-navbar">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" asp-fragment="section-home">Home</a></li>
+            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" asp-fragment="section-features">Features</a></li>
+            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" asp-fragment="section-team" style="display: none;" id="menu-item-team">Reviews</a></li>
+            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" asp-fragment="section-projects" style="display: none;" id="menu-item-projects">Pricing</a></li>
+            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" asp-fragment="section-faq" style="display: none;" id="menu-item-faq">FAQ</a></li>
+        </ul>
+        <ul class="navbar-nav">
+            @if (SignInManager.IsSignedIn(User))
+            {           
+            <li class="nav-item">
+                <a class="nav-link text-primary" asp-area="" asp-controller="Account" asp-action="RouteToDashboard" style="width: auto;">Dashboard (@User.Identity.Name)</a>
+            </li>
+                <li class="nav-item">
+                    <form class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="btn btn-outline-primary">Logout</button>
+                    </form>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item cta-btn ml-xl-2 ml-lg-2 ml-md-0 ml-sm-0 ml-0">
+                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">
+                        <span class="pb_rounded-4 px-4">Login</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

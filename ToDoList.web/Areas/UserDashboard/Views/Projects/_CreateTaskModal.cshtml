@@ -1,0 +1,57 @@
+﻿@model TaskViewModel
+
+@using ToDoList.Domains.Enums
+
+<!-- Button trigger modal -->
+
+<button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#addTaskModal">
+    Add
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="post" asp-controller="Tasks" asp-action="Create">
+                    <div class="form-group">
+                        <input asp-for="ProjectId" id="inputProjectId" class="form-control" hidden>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Title" for="inputTaskTitle"></label>
+                        <input asp-for="Title" id="inputTaskTitle" class="form-control">
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" for="inputTaskDescription"></label>
+                        <textarea asp-for="Description" id="inputTaskDescription" class="form-control" rows="2"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Evaluation" for="inputTaskEvaluation"></label>
+                        <select asp-for="Evaluation" asp-items="Html.GetEnumSelectList<Evaluation>()" id="inputTaskEvaluation" class="form-control"></select>
+                        <span asp-validation-for="Evaluation" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Priority" for="inputTaskPriority"></label>
+                        <select asp-for="Priority" asp-items="Html.GetEnumSelectList<Priority>()" id="inputTaskPriority" class="form-control"></select>
+                        <span asp-validation-for="Priority" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Status" for="inputTaskStatus"></label>
+                        <select asp-for="Status" asp-items="Html.GetEnumSelectList<Status>()" id="inputTaskStatus" class="form-control"></select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TillDate" for="inputTaskTillDate"></label>
+                        <input asp-for="TillDate" id="inputTaskTillDate" class="form-control" value="@Model.TillDate.ToString("yyyy-MM-dd HH:mm").Replace(' ','T')">
+                        <span asp-validation-for="TillDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create new Task" class="btn btn-success float-right">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

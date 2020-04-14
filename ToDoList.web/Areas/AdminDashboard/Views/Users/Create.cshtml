@@ -1,0 +1,88 @@
+﻿@using ToDoList.Domains.Entities
+@model CreateUserViewModel
+@{
+    ViewData["Title"] = "Create New User";
+    Layout = "~/Areas/AdminDashboard/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Create New User</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Create New User</li>
+                </ol>
+            </div>
+            <div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <form method="post" asp-area="AdminDashboard" asp-controller="Users" asp-action="Create">
+        <div class="row">
+            <div class="col-md-9 col-lg-7">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">General</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label asp-for="Name" for="inputName"></label>
+                            <input asp-for="Name" id="inputName" class="form-control">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Surname" for="inputSurname"></label>
+                            <input asp-for="Surname" id="inputSurname" class="form-control" />
+                            <span asp-validation-for="Surname" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Email" for="inputEmail"></label>*
+                            <input asp-for="Email" id="inputEmail" class="form-control">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password" for="inputPassword"></label>*
+                            <input asp-for="Password" id="inputPassword" class="form-control">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Role" for="inputRole"></label>*
+                            <select asp-for="Role" id="inputRole" class="form-control">
+                                <option value="@UserRoles.ROLE_ADMINISTRATOR">@UserRoles.ROLE_ADMINISTRATOR</option>
+                                <option value="@UserRoles.ROLE_USER" selected>@UserRoles.ROLE_USER</option>
+                                <option value="@UserRoles.ROLE_CLIENT">@UserRoles.ROLE_CLIENT</option>
+                            </select>
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-9 col-lg-7">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancel</a>
+                <input type="submit" value="Create new User" class="btn btn-success float-right">
+            </div>
+        </div>
+    </form>
+</section>
+<!-- /.content -->
