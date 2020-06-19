@@ -45,7 +45,8 @@ namespace ToDoList.web
             services.AddScoped<IDemoDataSeeder, DemoDataSeeder>();
             services.AddScoped<IPublicDataService, PublicDataService>();
 
-            services.AddDbContext<ToDoListDbContext>();
+            services.AddDbContext<ToDoListDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             /*services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
@@ -66,7 +67,7 @@ namespace ToDoList.web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILogger<DemoIdentityDataSeeder> logger, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILogger<DemoIdentityDataSeeder> logger, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ToDoListDbContext context)
         {
             if (env.IsDevelopment())
             {
@@ -79,6 +80,7 @@ namespace ToDoList.web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            context.Database.Migrate();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

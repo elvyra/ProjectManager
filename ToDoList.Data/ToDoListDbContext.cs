@@ -40,19 +40,5 @@ namespace ToDoList.Data
 
             base.OnModelCreating(builder);
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            // KITM classroom local database connect string
-            // var connectionString = @"user id=KAB215-12\Moksleivis;Integrated Security=True;Data Source=KAB215-12\SQLEXPRESS;Database=ToDoList";
-
-            // Home computer local database connect string
-            // var connectionString = @"Server = localhost\MSSQLSERVER01; Database = ToDoList; Trusted_Connection = True;";
-
-            // Default connect string
-            var connectionString = "Server=(localdb)\\mssqllocaldb;Database=ToDoList;Trusted_Connection=True;MultipleActiveResultSets=true";
-            optionsBuilder.UseSqlServer(connectionString);
-            base.OnConfiguring(optionsBuilder);
-        }
     }
 }
